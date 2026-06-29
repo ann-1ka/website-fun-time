@@ -13,7 +13,7 @@ def user_profile_picture_path(instance, filename):
 
 class User(AbstractUser):
     email = models.EmailField(blank=True, null=True)
-    username = models.Charfield(max_length=16, blank=False, null=False)
+    username = models.CharField(max_length=16, blank=False, null=False, unique=True)
     phone_number = models.CharField(max_length=16) #, validators=[telephone_validator]
     dob = models.DateField(default=date.today)
     display_name = models.CharField(max_length=64, null=True, blank=True)
@@ -23,7 +23,7 @@ class User(AbstractUser):
     profile_picture = models.FileField(upload_to=user_profile_picture_path, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['username','password','dob']
+    REQUIRED_FIELDS = ['password','dob']
 
 # Source - https://stackoverflow.com/a/58799650
 # Posted by Enthusiast Martin, modified by community. See post 'Timeline' for change history
