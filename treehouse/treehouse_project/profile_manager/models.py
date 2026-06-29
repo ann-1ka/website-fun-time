@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import date, datetime
-#from validators import telephone_validator, color_validator
+#from validators import username_validator, telephone_validator, color_validator
 
 def user_background_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/profile_background_images/<id>/<filename>
@@ -12,7 +12,8 @@ def user_profile_picture_path(instance, filename):
     return 'profile_background_images/{0}/{1}'.format(instance.user.id, filename)
 
 class User(AbstractUser):
-    email = models.EmailField(blank=False, null=True)
+    email = models.EmailField(blank=True, null=True)
+    username = models.Charfield(max_length=16, blank=False, null=False)
     phone_number = models.CharField(max_length=16) #, validators=[telephone_validator]
     dob = models.DateField(default=date.today)
     display_name = models.CharField(max_length=64, null=True, blank=True)
@@ -21,7 +22,8 @@ class User(AbstractUser):
     background_color = models.CharField(max_length=8)  #, validators=[color_validator]
     profile_picture = models.FileField(upload_to=user_profile_picture_path, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    REQUIRED_FIELDS = ['dob']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['username','password','dob']
 
 # Source - https://stackoverflow.com/a/58799650
 # Posted by Enthusiast Martin, modified by community. See post 'Timeline' for change history
